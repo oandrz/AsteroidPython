@@ -54,11 +54,20 @@ def main():
         updatables.update(dt)
         
         # Collision detection
+        # Player-asteroid collision
         for asteroid in asteroids:
             if player.collides_with(asteroid):
                 print("Game over!")
                 pygame.quit()
                 sys.exit()
+        
+        # Bullet-asteroid collision
+        for asteroid in list(asteroids):  # Create a copy of the list to safely modify it during iteration
+            for shot in list(shots):
+                if asteroid.collides_with(shot):
+                    # Remove the bullet and split the asteroid
+                    shot.kill()
+                    asteroid.split()
         
         # Clear the screen
         screen.fill("black")
