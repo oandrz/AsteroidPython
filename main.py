@@ -1,6 +1,7 @@
 import pygame
 from constants import *
 from player import Player
+from pygame.sprite import Group
 
 def main():
     print("Starting Asteroids!")
@@ -18,8 +19,14 @@ def main():
     clock = pygame.time.Clock()
     dt = 0  # delta time in seconds
     
-    # Create player
+    # Create sprite groups
+    updatables = Group()
+    drawables = Group()
+    
+    # Create player and add to groups
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+    updatables.add(player)
+    drawables.add(player)
     
     # Game loop
     running = True
@@ -29,11 +36,15 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         
+        # Update all updatable objects
+        updatables.update(dt)
+        
         # Clear the screen
         screen.fill("black")
         
-        # Draw player
-        player.draw(screen)
+        # Draw all drawable objects
+        for drawable in drawables:
+            drawable.draw(screen)
         
         # Update the display
         pygame.display.flip()
